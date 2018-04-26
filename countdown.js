@@ -13,18 +13,41 @@ window.onload=function(){
     canvas.width=WINDOW_WIDTH;
     canvas.height=WINDOW_HEIGHT;
 
-    curShowTimeSeconds=getCurrentShowTImeSeconds();
-    render(context);
+    curShowTimeSeconds=getCurrentShowTImeSeconds(); //本次render使用的倒计时时间（时间差）
+    setInterval(
+        function(){
+            render(context);
+            update();
+        },
+        50
+    );
 }
-function getCurrentShowTImeSeconds(){
+function getCurrentShowTImeSeconds(){  //计算倒计时时间
     var curTime=new Date();
     var ret=endTime.getTime()-curTime.getTime();
     ret = Math.round(ret/1000);
 
     return ret>=0?ret:0;
 }
-function render(cxt){
 
+function update(){
+    var nextShowTimeSeconds=getCurrentShowTImeSeconds();//render后再次计算倒计时
+
+
+    var nextHours=parseInt(nextShowTimeSeconds/3600);    //计算当前时间
+    var nextMinutes=parseInt((nextShowTimeSeconds-nextHours*3600)/60);
+    var nextSeconds=nextShowTimeSeconds%60;
+
+    var curHours=parseInt(curShowTimeSeconds/3600);        //计算render时间（上一次）
+    var curMinutes=parseInt((curShowTimeSeconds-curHours*3600)/60);
+    var curSeconds=curShowTimeSeconds%60;
+
+    if(nextSeconds!=curSeconds){
+        curShowTimeSeconds=nextShowTimeSeconds;
+    }
+}
+function render(cxt){                     //主要渲染静态页面函数
+    cxt.clearRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);//防止render重叠，对整个页面进行刷新
     var hours=parseInt(curShowTimeSeconds/3600);
     var minutes=parseInt((curShowTimeSeconds-hours*3600)/60);
     var seconds=curShowTimeSeconds%60;
