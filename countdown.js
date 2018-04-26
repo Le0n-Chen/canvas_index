@@ -4,6 +4,8 @@ var RADIUS=8;
 var MARGIN_TOP=60;
 var MARGIN_LEFT=30;
 
+const endTime = new Date(2018,3,28,18,47,52);// js中月份特殊，0-11表示1-12月
+var curShowTimeSeconds=0;
 window.onload=function(){
     var canvas=document.getElementById('canvas');
     var context=canvas.getContext("2d");
@@ -11,13 +13,21 @@ window.onload=function(){
     canvas.width=WINDOW_WIDTH;
     canvas.height=WINDOW_HEIGHT;
 
+    curShowTimeSeconds=getCurrentShowTImeSeconds();
     render(context);
 }
+function getCurrentShowTImeSeconds(){
+    var curTime=new Date();
+    var ret=endTime.getTime()-curTime.getTime();
+    ret = Math.round(ret/1000);
 
+    return ret>=0?ret:0;
+}
 function render(cxt){
-    var hours=12;
-    var minutes=34;
-    var seconds=56;
+
+    var hours=parseInt(curShowTimeSeconds/3600);
+    var minutes=parseInt((curShowTimeSeconds-hours*3600)/60);
+    var seconds=curShowTimeSeconds%60;
 
     renderDigit( MARGIN_LEFT , MARGIN_TOP , parseInt(hours/10) , cxt )
     renderDigit( MARGIN_LEFT + 15*(RADIUS+1) , MARGIN_TOP , parseInt(hours%10) , cxt )
@@ -43,17 +53,3 @@ function renderDigit(x,y,num,cxt){
         }
     }
 }
-/*function renderDigit( x , y , num , cxt ){
-
-    cxt.fillStyle = "rgb(0,102,153)";
-
-    for( var i = 0 ; i < digit[num].length ; i ++ )
-        for(var j = 0 ; j < digit[num][i].length ; j ++ )
-            if( digit[num][i][j] == 1 ){
-                cxt.beginPath();
-                cxt.arc( x+j*2*(RADIUS+1)+(RADIUS+1) , y+i*2*(RADIUS+1)+(RADIUS+1) , RADIUS , 0 , 2*Math.PI )
-                cxt.closePath()
-
-                cxt.fill()
-            }
-}*/
