@@ -1,16 +1,19 @@
-var WINDOW_WIDTH=1024;
-var WINDOW_HEIGHT=768
-var RADIUS=8;
-var MARGIN_TOP=60;
-var MARGIN_LEFT=30;
-
-const endTime = new Date(2018,3,28,18,47,52);// js中月份特殊，0-11表示1-12月
+var endTime = new Date();// js中月份特殊，0-11表示1-12月
+endTime.setTime( endTime.getTime()+3600*1000);
 var curShowTimeSeconds=0
 var balls=[];
 const colors=["#33B3E5","#0099CC","#AA66CC","#9933CC","#99CC00","#669900","#FFBB33","#FF8800","#FF4444","#000000"]
 
 
 window.onload=function(){
+    WINDOW_WIDTH=document.body.clientWidth;
+    WINDOW_HEIGHT=document.body.clientHeight;
+
+
+    MARGIN_LEFT=Math.round(WINDOW_WIDTH/10);
+    RADIUS=Math.round(WINDOW_WIDTH*4/5/108)-1;
+    MARGIN_TOP=Math.round(WINDOW_HEIGHT/5);
+
     var canvas=document.getElementById('canvas');
     var context=canvas.getContext("2d");
 
@@ -30,8 +33,8 @@ window.onload=function(){
 
 function getCurrentShowTImeSeconds(){  //计算倒计时时间
     var curTime=new Date();
-    var ret=endTime.getTime()-curTime.getTime();
-    ret = Math.round(ret/1000);
+    var ret=curTime.getHours()*3600+curTime.getMinutes()*60+curTime.getSeconds();
+
 
     return ret>=0?ret:0;
 }
